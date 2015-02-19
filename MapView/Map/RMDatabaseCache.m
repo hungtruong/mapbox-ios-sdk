@@ -132,8 +132,17 @@
 	[self configureDBForFirstUse];
 
     _tileCount = [self countTiles];
+    
+    //DO NOT BACKUP CACHE IN ICLOUD
+    NSURL *cacheURL = [NSURL fileURLWithPath:path];
+    NSError *error = nil;
+    BOOL success = [cacheURL setResourceValue: [NSNumber numberWithBool: YES]
+                                       forKey: NSURLIsExcludedFromBackupKey error: &error];
+    if (!success) {
+        NSLog(@"Was not able to set cache to not auto-backup!");
+    }
 
-	return self;	
+	return self;
 }
 
 - (id)initUsingCacheDir:(BOOL)useCacheDir
